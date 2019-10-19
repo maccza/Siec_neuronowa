@@ -1,0 +1,10 @@
+<Buttons>
+    <Button name='Start'>
+        <width>100</width>
+        <height>20</height>
+    </Button>
+    <Button name='Stop'>
+        <width>100</width>
+        <height>20</height>
+    </Button>        
+</Buttons>    
