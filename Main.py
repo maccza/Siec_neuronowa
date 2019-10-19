@@ -1,9 +1,10 @@
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from GUI import MainInterface
 
-import GUI.MainInterface as MainInterface
 
-if __name__ == 'name':
-    interface = MainInterface()
-    interface.connect('destroy',Gtk.main_quit)
-    interface.show_all()    
-    Gtk.main()
-       
+interface = MainInterface.MainInterface()
+interface.connect('destroy',Gtk.main_quit)
+interface.show_all() 
+Gtk.main()

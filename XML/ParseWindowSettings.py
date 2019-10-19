@@ -9,8 +9,12 @@ class ParseWindowSettings:
             self.width= int(par_width.childNodes[0].data)
             par_height = setting.getElementsByTagName('height')[0]
             self.height = int(par_height.childNodes[0].data)
+            par_title = setting.getElementsByTagName('title')[0]
+            self.title = str(par_title.childNodes[0].data)
     def return_height(self):
         return self.height
     def return_width(self):
-        return self.width               
+        return self.width
+    def return_window_title(self):
+        return self.title                   
        
