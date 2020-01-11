@@ -31,4 +31,5 @@ class SineNet(torch.nn.Module):
         x = self.fc1(x)
         x = self.act1(x)
         x = self.fc2(x)
+
         return x
