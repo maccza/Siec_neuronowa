@@ -4,6 +4,7 @@ from gi.repository import Gtk
 import XML.ParseWindowSettings as ParseWindowSettings
 import XML.ParseButtonsSettings as ParseButtonsSettings
 from functools import partial
+from COLLECTIONS.CustomTuples import CustomTuple
 
 class MainInterface(Gtk.Window):
     def __init__(self, *args, **kwargs):
@@ -11,6 +12,9 @@ class MainInterface(Gtk.Window):
         
         self.window_init() 
         
+        self.params_init()
+    def params_init(self):
+        self.xml_path = None    
     def window_init(self):
         self.read_window_settings()
         
@@ -22,7 +26,10 @@ class MainInterface(Gtk.Window):
         
         self.panel_init()
 
-        self.init_menu_bar() 
+        self.init_menu_bar()
+        self.init_tuples()
+    def init_tuples(self):
+        self.Log_Tuple = CustomTuple().init_log_tuple()
     def read_window_settings(self):
         parse_xml = ParseWindowSettings.ParseWindowSettings()
         
@@ -67,13 +74,15 @@ class MainInterface(Gtk.Window):
 
         self.button_panel_init()
     
-    def button_panel_init(self):
-        
-        
+    def button_init(self):
         self.start_button()
         
         self.stop_button()
-        
+
+        self.add_signals_to_buttons()
+    def button_panel_init(self):
+        self.button_init()
+
         self.button_grid.add(self.start_button_)
         
         self.button_grid.attach_next_to(self.stop_button_,self.start_button_,Gtk.PositionType.BOTTOM,2,2)
@@ -144,13 +153,26 @@ class MainInterface(Gtk.Window):
         if len(return_tuple) < 2:
             print("zły format ")
         else:
-            message_dialog = Gtk.MessageDialog(parent=self,
+            if return_tuple[0] == 2:
+                message_dialog = Gtk.MessageDialog(parent=self,
                                           flags=Gtk.DialogFlags.MODAL,
                                           type=Gtk.MessageType.WARNING,
-                                          buttons=Gtk.ButtonsType.OK_CANCEL,
+                                          buttons=Gtk.ButtonsType.OK,
                                           message_format=return_tuple[1]   )
         
+            elif return_tuple[0] == 1:
+                message_dialog = Gtk.MessageDialog(parent=self,
+                                          flags=Gtk.DialogFlags.MODAL,
+                                          type=Gtk.MessageType.INFO,
+                                          buttons=Gtk.ButtonsType.OK,
+                                          message_format=return_tuple[1]   )
         
+            elif return_tuple[0] == 3:
+                    message_dialog = Gtk.MessageDialog(parent=self,
+                                          flags=Gtk.DialogFlags.MODAL,
+                                          type=Gtk.MessageType.ERROR,
+                                          buttons=Gtk.ButtonsType.OK,
+                                          message_format=return_tuple[1]   )
         
         message_dialog.connect("response", self.destroy_message_box)
 
@@ -161,17 +183,45 @@ class MainInterface(Gtk.Window):
     def destroy_message_box(self,widget,response_id):
         widget.destroy()
 
+
     def choose_xml_file(self,widget):
         
+        log_tuple = None
         chooser = Gtk.FileChooserDialog("Load xml file", self,
                                             Gtk.FileChooserAction.OPEN,
                                            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                                             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+        self.xml_filter_dialog(chooser)
         response = chooser.run()
         if response == Gtk.ResponseType.OK:
-            print("Select clicked")
-            print("Folder selected: " + chooser.get_filename())
+            self.xml_path = chooser.get_filename()
+            log_tuple = self.Log_Tuple(1,"XML load successfully",None)
         elif response == Gtk.ResponseType.CANCEL:
-            print("Cancel clicked")
+            log_tuple = self.Log_Tuple(1,"XML did not choose",None)
 
         chooser.destroy()
+        self.show_message(log_tuple)
+
+    def xml_filter_dialog(self,dialog):
+        xml_filter = Gtk.FileFilter()
+        xml_filter.set_name("xml")
+        xml_filter.add_pattern("*.xml")
+        xml_filter.add_mime_type("xml")
+        dialog.add_filter(xml_filter)
+    
+    def start_signal_fun(self,widget):
+        
+        if self.xml_path is None:
+            
+            log_tuple = self.Log_Tuple(3,"Load the xml file first",None)
+            
+            self.show_message(log_tuple)
+            
+            return log_tuple
+        
+        else:
+            pass
+
+    def add_signals_to_buttons(self):
+
+        self.start_button_.connect("clicked",self.start_signal_fun)
