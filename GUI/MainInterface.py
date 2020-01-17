@@ -69,7 +69,7 @@ class MainInterface(Gtk.Window):
     
     def button_panel_init(self):
         
-        print("dfsddsgfvsdfgdfsgdsfgdsfg")
+        
         self.start_button()
         
         self.stop_button()
@@ -110,6 +110,7 @@ class MainInterface(Gtk.Window):
         box.pack_start(self.menubar, False, False, 0)
 
         self.menu_box.add(box)
+
     def create_ui_menager(self):
         
         self.uimanager = Gtk.UIManager()
@@ -127,12 +128,15 @@ class MainInterface(Gtk.Window):
         self.uimanager.insert_action_group(action_group)
 
     def add_file_menu_actions (self, action_group):
-        action_filemenu = Gtk.Action("FileMenu", "File", None, None)
-        action_group.add_action(action_filemenu)
-
-        action_filenewmenu = Gtk.Action("LoadXml", None, None, Gtk.STOCK_NEW)
-        action_group.add_action(action_filenewmenu)
-        
+        action_group.add_actions([
+            ("FileMenu", None, "File"),
+            ("LoadXml", None, "Load Xml File", "<control>L", None,
+             self.choose_xml_file),
+            ("ExportParameters",None,"Export Parameters","<control>E", None,
+             None),
+            ("ClearChart", None, "Clear Chart", "<control><alt>S", None,
+             None)
+        ])
     def show_message(self,return_tuple):
 
         message_dialog = None
@@ -157,3 +161,17 @@ class MainInterface(Gtk.Window):
     def destroy_message_box(self,widget,response_id):
         widget.destroy()
 
+    def choose_xml_file(self,widget):
+        
+        chooser = Gtk.FileChooserDialog("Load xml file", self,
+                                            Gtk.FileChooserAction.OPEN,
+                                           (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                            Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+        response = chooser.run()
+        if response == Gtk.ResponseType.OK:
+            print("Select clicked")
+            print("Folder selected: " + chooser.get_filename())
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+
+        chooser.destroy()
