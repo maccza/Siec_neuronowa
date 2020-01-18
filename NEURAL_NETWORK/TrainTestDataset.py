@@ -1,5 +1,6 @@
 import torch
 
+
 class DataSet:
     def __init__(self, train_size, x_train_scale, y_train_type, test_size, y_test_type):
         self.tr_size = train_size
@@ -42,6 +43,3 @@ class DataSet:
         elif self.y_te_tp is 'Tan':
             _y_test = torch.tan(self.x_test)
         return _y_test
-
-
-
