@@ -27,12 +27,10 @@ class ParseParametersNN:
                     accept_y_train_test_type = {'Sin': 'Sin', 'Cos': 'Cos', 'Tan': 'Tan'}
                     par_train_size = setting.getElementsByTagName('train_size')[0]
                     self.train_size = int(par_train_size.childNodes[0].data)
-                    par_x_train_scale_0 = setting.getElementsByTagName('x_train_scale_1')[0]
-                    self.x_train_scale_0  = int(par_x_train_scale_0 .childNodes[0].data)
+                    par_x_train_scale_0 = setting.getElementsByTagName('x_train_scale_0')[0]
                     par_x_train_scale_1 = setting.getElementsByTagName('x_train_scale_1')[0]
-                    self.x_train_scale_1 = int(par_x_train_scale_1.childNodes[0].data)
                     par_x_train_scale_2 = setting.getElementsByTagName('x_train_scale_2')[0]
-                    self.x_train_scale_2 = int(par_x_train_scale_2.childNodes[0].data)
+                    self.x_train_scale = [int(par_x_train_scale_0 .childNodes[0].data), int(par_x_train_scale_1.childNodes[0].data), int(par_x_train_scale_2.childNodes[0].data)]
                     par_y_train_type = setting.getElementsByTagName('y_train_type')[0]
                     par_y_train_type = str(par_y_train_type.childNodes[0].data)
                     self.y_train_type = accept_y_train_test_type[par_y_train_type]

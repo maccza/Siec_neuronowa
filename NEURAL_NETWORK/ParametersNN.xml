@@ -1,15 +1,15 @@
 <Parameters>
     <Parameter name = 'NeuralNetwork'>
-        <n_hidden_neurons>100</n_hidden_neurons>
+        <n_hidden_neurons>10</n_hidden_neurons>
         <fun_activation>Sigmoid</fun_activation>
     </Parameter>
     <Parameter name = 'Dataset'>
         <train_size>100</train_size>
         <x_train_scale_0>20</x_train_scale_0>
-        <x_train_scale_1>10</x_train_scale_1>
+        <x_train_scale_1>0</x_train_scale_1>
         <x_train_scale_2>10</x_train_scale_2>
         <y_train_type>Sin</y_train_type>
-        <test_size>10</test_size>
+        <test_size>100</test_size>
         <y_test_type>Sin</y_test_type>
     </Parameter>
 </Parameters>
