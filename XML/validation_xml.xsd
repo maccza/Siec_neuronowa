@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Parameters">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="Parameter">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" name="train_size" type="xs:unsignedByte" />
+              <xs:element minOccurs="0" name="x_train_scale_0" type="xs:unsignedByte" />
+              <xs:element minOccurs="0" name="x_train_scale_1" type="xs:unsignedByte" />
+              <xs:element minOccurs="0" name="x_train_scale_2" type="xs:unsignedByte" />
+              <xs:element minOccurs="0" name="y_train_type" type="xs:string" />
+              <xs:element minOccurs="0" name="test_size" type="xs:unsignedByte" />
+              <xs:element minOccurs="0" name="y_test_type" type="xs:string" />
+              <xs:element minOccurs="0" name="n_hidden_neurons" type="xs:unsignedByte" />
+              <xs:element minOccurs="0" name="fun_activation" type="xs:string" />
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

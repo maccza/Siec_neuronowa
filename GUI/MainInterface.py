@@ -5,7 +5,9 @@ import XML.ParseWindowSettings as ParseWindowSettings
 import XML.ParseButtonsSettings as ParseButtonsSettings
 from functools import partial
 from COLLECTIONS.CustomTuples import CustomTuple
+from CONTROL import ContronNetwork as cn
 
+import multiprocessing
 class MainInterface(Gtk.Window):
     def __init__(self, *args, **kwargs):
         Gtk.Window.__init__(self)
@@ -14,7 +16,8 @@ class MainInterface(Gtk.Window):
         
         self.params_init()
     def params_init(self):
-        self.xml_path = None    
+
+        self.control = cn.Control()
     def window_init(self):
         self.read_window_settings()
         
@@ -186,6 +189,7 @@ class MainInterface(Gtk.Window):
 
     def choose_xml_file(self,widget):
         
+        xml_path =None
         log_tuple = None
         chooser = Gtk.FileChooserDialog("Load xml file", self,
                                             Gtk.FileChooserAction.OPEN,
@@ -194,13 +198,27 @@ class MainInterface(Gtk.Window):
         self.xml_filter_dialog(chooser)
         response = chooser.run()
         if response == Gtk.ResponseType.OK:
-            self.xml_path = chooser.get_filename()
-            log_tuple = self.Log_Tuple(1,"XML load successfully",None)
+            xml_path = chooser.get_filename()
+            
         elif response == Gtk.ResponseType.CANCEL:
             log_tuple = self.Log_Tuple(1,"XML did not choose",None)
+        
+
 
         chooser.destroy()
+        if xml_path is not None:
+
+
+            code,message = self.control.load_xml(xml_path)
+            print(message)
+
+            log_tuple = self.Log_Tuple(code,message,None)
+
+
+
         self.show_message(log_tuple)
+
+        
 
     def xml_filter_dialog(self,dialog):
         xml_filter = Gtk.FileFilter()
@@ -211,7 +229,7 @@ class MainInterface(Gtk.Window):
     
     def start_signal_fun(self,widget):
         
-        if self.xml_path is None:
+        if self.control.xml_path is None:
             
             log_tuple = self.Log_Tuple(3,"Load the xml file first",None)
             

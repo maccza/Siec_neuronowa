@@ -3,12 +3,13 @@ import torch
 
 
 class ParseParametersNN:
-    def __init__(self):
-        self.xml_ = minidom.parse('NEURAL_NETWORK/ParametersNN.xml')
+    def __init__(self,xml_path):
+        self.xml_ = minidom.parse(xml_path)
         self.settings_tree = self.xml_.documentElement
         self.settings = self.settings_tree.getElementsByTagName('Parameter')
 
     def parse_parameters_NN_by_name(self, name):
+
         accept_fun_activation = {'Sigmoid': torch.nn.Sigmoid(), 'Tanh': torch.nn.Tanh, 'ReLU': torch.nn.ReLU}
         for setting in self.settings:
             if setting.getAttribute('name') == name and name == 'NeuralNetwork':
@@ -44,9 +45,3 @@ class ParseParametersNN:
                 except ValueError:
                     raise print('\nNiepoprawny typ jednego z parametrow: train_size, x_train_scale_0, x_train_scale_1, x_train_scale_1, test_size. '
                                 'Wymienione parametry powinny byc typu int.\n')
-
-
-if __name__ == '__main__':
-    k = ParseParametersNN()
-    k.parse_parameters_NN_by_name('NeuralNetwork')
-    k.parse_parameters_NN_by_name('Dataset')
