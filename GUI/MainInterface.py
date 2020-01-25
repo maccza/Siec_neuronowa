@@ -236,9 +236,15 @@ class MainInterface(Gtk.Window):
             self.show_message(log_tuple)
             
             return log_tuple
-        
         else:
-            pass
+            
+            self.control.parse_setting_xml
+            status,message = self.control.to_lern_network()
+            
+            if status != 1:
+                self.show_message(self.Log_Tuple(status,
+                                message,None))
+            
 
     def add_signals_to_buttons(self):
 

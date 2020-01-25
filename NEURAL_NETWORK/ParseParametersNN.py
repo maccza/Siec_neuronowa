@@ -7,7 +7,8 @@ class ParseParametersNN:
         self.xml_ = minidom.parse(xml_path)
         self.settings_tree = self.xml_.documentElement
         self.settings = self.settings_tree.getElementsByTagName('Parameter')
-
+        self.message = None
+        self.status = None
     def parse_parameters_NN_by_name(self, name):
 
         accept_fun_activation = {'Sigmoid': torch.nn.Sigmoid(), 'Tanh': torch.nn.Tanh, 'ReLU': torch.nn.ReLU}
@@ -19,10 +20,19 @@ class ParseParametersNN:
                     par_fun_act = setting.getElementsByTagName('fun_activation')[0]
                     par_fun_act = str(par_fun_act.childNodes[0].data)
                     self.fun_activation = accept_fun_activation[par_fun_act]
+                    self.message = f'xml load succesfully .'
+                    self.status = 1
                 except KeyError:
-                    raise print('\nNiepoprawna wartosc nazwy funkcji aktywacji. Do wyboru: Sigmoid, Tanh, ReLU.\n')
+                    self.message = 'Niepoprawna wartosc nazwy funkcji aktywacji. Do wyboru: Sigmoid, Tanh, ReLU'
+                    self.status = 2
+                    
                 except TypeError:
-                    raise print('\nIlosc neuronow w ukrytej warstwie powinna byc typu int.\n')
+                    self.message = 'Ilosc neuronow w ukrytej warstwie powinna byc typu int'
+                    self.status = 3
+                except ValueError:
+                    self.message = 'Niepoprawny typ jednego z parametrow: n_hidden_neurons. '
+                    self.status = 3
+                    
             elif setting.getAttribute('name') == name and name == 'Dataset':
                 try:
                     accept_y_train_test_type = {'Sin': 'Sin', 'Cos': 'Cos', 'Tan': 'Tan'}
@@ -40,8 +50,14 @@ class ParseParametersNN:
                     par_y_test_type = setting.getElementsByTagName('y_test_type')[0]
                     par_y_test_type = str(par_y_test_type.childNodes[0].data)
                     self.y_test_type = accept_y_train_test_type[par_y_test_type]
+                    self.message = f'xml load succesfully .'
+                    self.status = 1
                 except KeyError:
-                    raise print('\nNiepoprawna wartosc parametru y_train_type. Do wyboru: Sin, Cos, Tan.\n')
+                    self.message = 'Niepoprawna wartosc parametru y_train_type. Do wyboru: Sin, Cos, Tan.'
+                    self.status = 3
+                    
                 except ValueError:
-                    raise print('\nNiepoprawny typ jednego z parametrow: train_size, x_train_scale_0, x_train_scale_1, x_train_scale_1, test_size. '
-                                'Wymienione parametry powinny byc typu int.\n')
+                    self.message = 'Niepoprawny typ jednego z parametrow: train_size, x_train_scale_0, x_train_scale_1, x_train_scale_1, test_size. '
+                    self.status = 3
+                    
+                               

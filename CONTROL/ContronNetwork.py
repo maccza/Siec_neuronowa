@@ -3,12 +3,14 @@ import NEURAL_NETWORK.ParseParametersNN as pp
 import NEURAL_NETWORK.TrainTestDataset as ttd
 from lxml import etree
 from pathlib import Path
+import torch
 class Control:
     def __init__(self):
 
         self.xml_path = None
         self.paramiters = None
-
+        self.dataset = None
+        self.neural_network = None
     def load_xml(self,xml_path):
         self.xml_path = xml_path
         status = self.valid_settings_xml
@@ -43,3 +45,38 @@ class Control:
             self.paramiters.parse_parameters_NN_by_name('NeuralNetwork')
             self.paramiters.parse_parameters_NN_by_name('Dataset')
 
+    def to_lern_network(self):
+
+        if self.paramiters.status == 1:
+            self.dataset = ttd.DataSet(self.paramiters.train_size, 
+                                         self.paramiters.x_train_scale, 
+                                         self.paramiters.y_train_type, 
+                                         self.paramiters.test_size, 
+                                         self.paramiters.y_test_type)
+            
+
+            self.neural_network = nn.SineNet(self.paramiters.n_hidden_neurons, 
+                                            self.paramiters.fun_activation)
+
+            print(self.paramiters.n_hidden_neurons, 
+                                            self.paramiters.fun_activation)
+            self.training_procedure(self.neural_network, 
+                                    self.dataset.x_train, 
+                                    self.dataset.y_train)
+
+        else:
+            return(self.paramiters.status,
+                    self.paramiters.message)
+        return(self.paramiters.status,
+                    self.paramiters.message)
+        
+    
+    def training_procedure(self,neural_network, x_tr, y_tr):
+        loss_fn = torch.nn.MSELoss()
+        optimizer = torch.optim.Adam(neural_network.parameters(), lr=0.01)
+        for epoch_index in range(2000):
+            optimizer.zero_grad()
+            y_pred = neural_network.forward(x_tr)
+            loss_val = loss_fn(y_pred, y_tr)
+            loss_val.backward()
+            optimizer.step()
