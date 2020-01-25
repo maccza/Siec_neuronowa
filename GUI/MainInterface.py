@@ -163,9 +163,9 @@ class MainInterface(Gtk.Window):
             ("LoadXml", None, "Load Xml File", "<control>L", None,
              self.choose_xml_file),
             ("ExportParameters",None,"Export Parameters","<control>E", None,
-             None),
+             self.export_paramiters_signal_fun),
             ("ClearChart", None, "Clear Chart", "<control><alt>S", None,
-             None)
+             self.clear_chart_signal)
         ])
 
 
@@ -251,6 +251,23 @@ class MainInterface(Gtk.Window):
         xml_filter.add_mime_type("xml")
         dialog.add_filter(xml_filter)
     
+    def export_paramiters_signal_fun(self,widget):
+        xml_path =None
+        chooser = Gtk.FileChooserDialog("Load xml file", self,
+                                            Gtk.FileChooserAction.SAVE,
+                                           (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                            Gtk.STOCK_SAVE, Gtk.ResponseType.ACCEPT))
+        chooser.set_do_overwrite_confirmation(True)
+        chooser.set_modal(True)
+        chooser.run()
+        xml_path = chooser.get_filename()
+        chooser.destroy()
+        self.control.export_parameters(xml_path)
+    def clear_chart_signal(self,widget):
+        self.chart.clear_chart()
+        
+        self.canvas.draw()
+    
     def start_signal_fun(self,widget):
         
         if self.control.xml_path is None:
@@ -268,7 +285,7 @@ class MainInterface(Gtk.Window):
             data_set_x,data_set_y = self.control.return_train_dataset_to_plot
             self.chart.plot_dataset(data_set_x,
                                     data_set_y,
-                                    "Dane uczące")
+                                    "Groud truth")
             self.canvas.draw()
             
             if status != 1:
@@ -289,11 +306,21 @@ class MainInterface(Gtk.Window):
             data_set_x,data_set_y = self.control.return_test_dataset_to_plot
             self.chart.plot_dataset(data_set_x,
                                     data_set_y,
-                                    "Dane testowe")
+                                    "Prediction")
             self.canvas.draw()
+    def stop_signal_fun(self,widget):
+        self.control.distroy_parameters()
+        self.chart.clear_chart()
+
+        
+        self.canvas.draw()
+
     def add_signals_to_buttons(self):
 
         self.start_button_.connect("clicked",
                                     self.start_signal_fun)
         self.predict_button_.connect("clicked",
                                     self.predict_signal_fun)
+
+        self.stop_button_.connect("clicked",
+                                    self.stop_signal_fun)

@@ -11,6 +11,7 @@ class Control:
         self.paramiters = None
         self.dataset = None
         self.neural_network = None
+        self.out_y_predict = None
     def load_xml(self,xml_path):
         self.xml_path = xml_path
         status = self.valid_settings_xml
@@ -70,9 +71,8 @@ class Control:
                     self.paramiters.message)
         
     def predict(self):
-        # self.y_pred = net.forward(x)
 
-        self.neural_network.forward(self.dataset.x_test)
+        self.out_y_predict = self.neural_network.forward(self.dataset.x_test)
 
     def training_procedure(self,neural_network, x_tr, y_tr):
         loss_fn = torch.nn.MSELoss()
@@ -86,7 +86,25 @@ class Control:
 
     @property
     def return_train_dataset_to_plot(self):
-        return self.dataset.x_train,self.dataset.y_train
+        return self.dataset.x_test,self.dataset.y_test
     @property
     def return_test_dataset_to_plot(self):
-        return self.dataset.x_test,self.dataset.y_test
+        return (self.dataset.x_test.numpy(),self.out_y_predict.data.numpy())
+
+    def distroy_parameters(self):
+        self.xml_path = None
+        self.paramiters = None
+        self.dataset = None
+        self.neural_network = None
+        self.out_y_predict = None
+
+    def export_parameters(self,file):
+
+        print(file)
+        with open(file,'w+') as f:
+            f.writelines(f'train_size   {self.paramiters.train_size}'+'\n')
+            f.writelines(f'x_train_scale    {self.paramiters.x_train_scale}'+'\n')
+            f.writelines(f'y_train_type {self.paramiters.y_train_type}'+'\n')
+            f.writelines(f'test_size    {self.paramiters.test_size}'+'\n')
+            f.writelines(f'train_size   {self.paramiters.train_size}'+'\n')
+            f.writelines(f'y_test_type  {self.paramiters.y_test_type}'+'\n')
