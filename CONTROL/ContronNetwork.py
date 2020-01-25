@@ -58,8 +58,7 @@ class Control:
             self.neural_network = nn.SineNet(self.paramiters.n_hidden_neurons, 
                                             self.paramiters.fun_activation)
 
-            print(self.paramiters.n_hidden_neurons, 
-                                            self.paramiters.fun_activation)
+            
             self.training_procedure(self.neural_network, 
                                     self.dataset.x_train, 
                                     self.dataset.y_train)
@@ -70,7 +69,11 @@ class Control:
         return(self.paramiters.status,
                     self.paramiters.message)
         
-    
+    def predict(self):
+        # self.y_pred = net.forward(x)
+
+        self.neural_network.forward(self.dataset.x_test)
+
     def training_procedure(self,neural_network, x_tr, y_tr):
         loss_fn = torch.nn.MSELoss()
         optimizer = torch.optim.Adam(neural_network.parameters(), lr=0.01)
@@ -80,3 +83,10 @@ class Control:
             loss_val = loss_fn(y_pred, y_tr)
             loss_val.backward()
             optimizer.step()
+
+    @property
+    def return_train_dataset_to_plot(self):
+        return self.dataset.x_train,self.dataset.y_train
+    @property
+    def return_test_dataset_to_plot(self):
+        return self.dataset.x_test,self.dataset.y_test

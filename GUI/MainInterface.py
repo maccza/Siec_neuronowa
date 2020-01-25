@@ -6,18 +6,21 @@ import XML.ParseButtonsSettings as ParseButtonsSettings
 from functools import partial
 from COLLECTIONS.CustomTuples import CustomTuple
 from CONTROL import ContronNetwork as cn
+from GUI import Chart as ch
 
-import multiprocessing
 class MainInterface(Gtk.Window):
     def __init__(self, *args, **kwargs):
         Gtk.Window.__init__(self)
         
+        self.params_init()
+
         self.window_init() 
         
-        self.params_init()
     def params_init(self):
 
         self.control = cn.Control()
+        
+        self.chart = ch.Chart()
     def window_init(self):
         self.read_window_settings()
         
@@ -31,8 +34,10 @@ class MainInterface(Gtk.Window):
 
         self.init_menu_bar()
         self.init_tuples()
+
     def init_tuples(self):
         self.Log_Tuple = CustomTuple().init_log_tuple()
+
     def read_window_settings(self):
         parse_xml = ParseWindowSettings.ParseWindowSettings()
         
@@ -59,6 +64,10 @@ class MainInterface(Gtk.Window):
 
         
         self.chart_frame = Gtk.Grid()
+        
+        self.chart_panel_init()
+
+        self.chart_frame.add(self.canvas)
 
         self.chart_buttons_grid = Gtk.Grid()
 
@@ -79,7 +88,7 @@ class MainInterface(Gtk.Window):
     
     def button_init(self):
         self.start_button()
-        
+        self.predict_button()
         self.stop_button()
 
         self.add_signals_to_buttons()
@@ -88,7 +97,9 @@ class MainInterface(Gtk.Window):
 
         self.button_grid.add(self.start_button_)
         
-        self.button_grid.attach_next_to(self.stop_button_,self.start_button_,Gtk.PositionType.BOTTOM,2,2)
+        self.button_grid.attach_next_to(self.predict_button_,self.start_button_,Gtk.PositionType.BOTTOM,2,2)
+
+        self.button_grid.attach_next_to(self.stop_button_,self.predict_button_,Gtk.PositionType.BOTTOM,2,2)
 
     def start_button(self):
 
@@ -108,7 +119,14 @@ class MainInterface(Gtk.Window):
         parse_xml.parse_button_settings_by_name('Stop')
         
         self.stop_button_.set_size_request(parse_xml.return_width(),parse_xml.return_height())
+    def predict_button(self):
+        self.predict_button_ = Gtk.Button(label = 'Predict')
 
+        parse_xml = ParseButtonsSettings.ParseButtonSettings()
+        
+        parse_xml.parse_button_settings_by_name('Predict')
+        
+        self.predict_button_.set_size_request(parse_xml.return_width(),parse_xml.return_height())
     
     def init_menu_bar(self):
 
@@ -149,6 +167,12 @@ class MainInterface(Gtk.Window):
             ("ClearChart", None, "Clear Chart", "<control><alt>S", None,
              None)
         ])
+
+
+    def chart_panel_init(self):
+       
+        self.canvas = self.chart.return_canvas
+        
     def show_message(self,return_tuple):
 
         message_dialog = None
@@ -240,12 +264,36 @@ class MainInterface(Gtk.Window):
             
             self.control.parse_setting_xml
             status,message = self.control.to_lern_network()
+
+            data_set_x,data_set_y = self.control.return_train_dataset_to_plot
+            self.chart.plot_dataset(data_set_x,
+                                    data_set_y,
+                                    "Dane uczące")
+            self.canvas.draw()
             
             if status != 1:
                 self.show_message(self.Log_Tuple(status,
                                 message,None))
             
+    def predict_signal_fun(self,widget):
+        if self.control.neural_network is None:
+            log_tuple = self.Log_Tuple(3,
+                        "Ferstly train network. To lern network load xml and press start",
+                        None)
+            self.show_message(log_tuple)
+        else:
+            self.control.predict()
+            self.control.parse_setting_xml
+            status,message = self.control.to_lern_network()
 
+            data_set_x,data_set_y = self.control.return_test_dataset_to_plot
+            self.chart.plot_dataset(data_set_x,
+                                    data_set_y,
+                                    "Dane testowe")
+            self.canvas.draw()
     def add_signals_to_buttons(self):
 
-        self.start_button_.connect("clicked",self.start_signal_fun)
+        self.start_button_.connect("clicked",
+                                    self.start_signal_fun)
+        self.predict_button_.connect("clicked",
+                                    self.predict_signal_fun)

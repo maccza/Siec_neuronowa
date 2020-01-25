@@ -6,5 +6,9 @@
     <Button name='Stop'>
         <width>100</width>
         <height>20</height>
-    </Button>        
+    </Button>
+        <Button name='Predict'>
+        <width>100</width>
+        <height>20</height>
+    </Button>           
 </Buttons>    
