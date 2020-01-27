@@ -30,10 +30,12 @@ Interfejs zawiera:
 - Sieć zaimplementowano za pomocą biblioteki PyTorch ([oficjalna strona modułu PyTorch](https://pytorch.org/)).
 
 ### 4. Instrukcja instalacji. 
-0. Zalecana wersja Python to 3.6.
-1. Najpierw nałeży zainstałować PyGObject: [link do tutoriala](https://pygobject.readthedocs.io/en/latest/getting_started.html).
+- Zalecana wersja Python to 3.6.
+1. Pobrać repozytorium: `$ git clone https://github.com/maccza/Siec_neuronowa.git`.
 2. Utworzyć witrualne środowisko: [link do tutoriala](https://python101.readthedocs.io/pl/latest/env/tools.html).
-3. Zainstalować używane moduły w projekcie: `$ pip3 install -r requirements.txt`
+3. Zainstałować PyGObject: [link do tutoriala](https://pygobject.readthedocs.io/en/latest/getting_started.html).
+4. Zainstalować używane moduły w projekcie: `$ pip3 install -r requirements.txt`
+5. Uruchomić plik `Main.py`.
 
 ### 5. Demo użycia.
 1. Użytkownik podaje parametry do pliku .xml w folderze `XML/ParametersNN.xml`
@@ -45,7 +47,7 @@ Interfejs zawiera:
         - **x_train_scale_0, x_train_scale_1, x_train_scale_2** - człony przez które zostanie przeliczony *x_train* w celu przeskalowania według wzoru: `x_train = x_train * x_train_scale_0 + x_train_scale_1 - x_train_scale_2`.
         - **y_train_type** - typ funkcji trygonometrycznej zbioru treningowego, do wyboru: `Sin, Cos, Tan`. Następnie do tych wartości automatycznie zostanie dodany odpowiedni szum (w celu zwiększenia trudności rozpoznania funkcji przez sieć neuronową).
         - **test_size** - rozmiar zbioru testowego. Ilość punktów, która będzie wygenerowana do zbioru testowego (bez dodawania szumu). Typ `int`.
-        - **y_test_type** - typ funkcji trygonometrycznej zbioru testowego, do wyboru: `Sin, Cos, Tan`.
+       - **y_test_type** - typ funkcji trygonometrycznej zbioru testowego, do wyboru: `Sin, Cos, Tan`.
 2. Laduje powyższy XML za pomocą przycisku `File -> Load Xml File`.
 3. Uczy sieć i wyświetla zbior testowy na wykresie, przycisk `Train`.
 4. Wykorzystuje wytrenowaną sieć do prognozowania i wyrysowuje uzyskane wyniki na wykresie, przycisk `Predict`.
