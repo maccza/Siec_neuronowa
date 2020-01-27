@@ -30,7 +30,7 @@ Interfejs zawiera:
 - Sieć zaimplementowano za pomocą biblioteki PyTorch ([oficjalna strona modułu PyTorch](https://pytorch.org/)).
 
 ### 4. Instrukcja instalacji. 
-0. Zalecana wercja Python to 3.6.
+0. Zalecana wersja Python to 3.6.
 1. Najpierw nałeży zainstałować PyGObject: [link do tutoriala](https://pygobject.readthedocs.io/en/latest/getting_started.html).
 2. Utworzyć witrualne środowisko: [link do tutoriala](https://python101.readthedocs.io/pl/latest/env/tools.html).
 3. Zainstalować używane moduły w projekcie: `$ pip3 install -r requirements.txt`
