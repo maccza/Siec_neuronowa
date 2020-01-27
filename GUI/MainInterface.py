@@ -6,7 +6,7 @@ from functools import partial
 import XML.ParseWindowSettings as ParseWindowSettings
 import XML.ParseButtonsSettings as ParseButtonsSettings
 from COLLECTIONS.CustomTuples import CustomTuple
-from CONTROL import ContronNetwork as cn
+from CONTROL import ControlNetwork as cn
 from GUI import Chart as ch
 
 
@@ -191,7 +191,10 @@ class MainInterface(Gtk.Window):
         chooser.run()
         xml_path = chooser.get_filename()
         chooser.destroy()
-        self.control.export_parameters(xml_path)
+        try:
+            self.control.export_parameters(xml_path)
+        except TypeError:
+            print("Export file unfortunately dont save.")
 
     def clear_chart_signal(self, widget):
         self.chart.clear_chart()
@@ -205,10 +208,14 @@ class MainInterface(Gtk.Window):
         else:
             self.control.parse_setting_xml
             status, message = self.control.to_lern_network()
-            data_set_x, data_set_y = self.control.return_train_dataset_to_plot
-            self.chart.plot_dataset(data_set_x,
-                                    data_set_y,
-                                    "True test")
+            try:
+                data_set_x, data_set_y = self.control.return_train_dataset_to_plot
+                self.chart.plot_dataset(data_set_x,
+                                        data_set_y,
+                                        "True test")
+            except AttributeError:
+                print('Zle podany jeden lub kilka parametrow w XML')
+                return (3, "Zle podany jeden lub kilka parametrow w XML")
             self.canvas.draw()
             if status != 1:
                 self.show_message(self.Log_Tuple(status, message, None))

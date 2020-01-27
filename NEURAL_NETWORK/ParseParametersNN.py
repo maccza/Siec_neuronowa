@@ -30,15 +30,15 @@ class ParseParametersNN:
                 except KeyError:
                     self.message = 'Niepoprawna wartosc nazwy funkcji aktywacji. Do wyboru: Sigmoid, Tanh, ReLU'
                     self.status = 2
-                    raise print(self.message)
+                    print(self.message)
                 except TypeError:
                     self.message = 'Ilosc neuronow w ukrytej warstwie powinna byc typu int'
                     self.status = 3
-                    raise print(self.message)
+                    print(self.message)
                 except ValueError:
                     self.message = 'Niepoprawny typ jednego z parametrow: n_hidden_neurons.'
                     self.status = 3
-                    raise print(self.message)
+                    print(self.message)
 
             elif setting.getAttribute('name') == name and name == 'Dataset':
                 try:
@@ -57,13 +57,13 @@ class ParseParametersNN:
                     par_y_test_type = setting.getElementsByTagName('y_test_type')[0]
                     par_y_test_type = str(par_y_test_type.childNodes[0].data)
                     self.y_test_type = accept_y_train_test_type[par_y_test_type]
-                    self.message = f'xml load succesfully .'
+                    self.message = f'xml load succesfully.'
                     self.status = 1
                 except KeyError:
                     self.message = 'Niepoprawna wartosc parametru "y_train_type" lub "y_test_type". Do wyboru: Sin, Cos, Tan.'
                     self.status = 3
-                    raise print(self.message)
+                    print(self.message)
                 except ValueError:
                     self.message = 'Niepoprawny typ jednego z parametrow: train_size, x_train_scale_0, x_train_scale_1, x_train_scale_1, test_size. '
                     self.status = 3
-                    raise print(self.message)
+                    print(self.message)

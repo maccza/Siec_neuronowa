@@ -49,16 +49,19 @@ class Control:
 
     def to_lern_network(self):
         if self.paramiters.status == 1:
-            self.dataset = ttd.DataSet(self.paramiters.train_size,
-                                         self.paramiters.x_train_scale,
-                                         self.paramiters.y_train_type,
-                                         self.paramiters.test_size,
-                                         self.paramiters.y_test_type)
-            self.neural_network = nn.SineNet(self.paramiters.n_hidden_neurons,
-                                            self.paramiters.fun_activation)
-            self.training_procedure(self.neural_network,
-                                    self.dataset.x_train,
-                                    self.dataset.y_train)
+            try:
+                self.dataset = ttd.DataSet(self.paramiters.train_size,
+                                             self.paramiters.x_train_scale,
+                                             self.paramiters.y_train_type,
+                                             self.paramiters.test_size,
+                                             self.paramiters.y_test_type)
+                self.neural_network = nn.SineNet(self.paramiters.n_hidden_neurons,
+                                                self.paramiters.fun_activation)
+                self.training_procedure(self.neural_network,
+                                        self.dataset.x_train,
+                                        self.dataset.y_train)
+            except AttributeError:
+                return (3, "Zle podany jeden lub kilka parametrow w XML")
         else:
             return(self.paramiters.status,
                     self.paramiters.message)
@@ -105,3 +108,5 @@ class Control:
                 f.writelines(f'y_test_type  {self.paramiters.y_test_type}'+'\n')
             except AttributeError:
                 print('Warning! Export empty file, because firstly load XML file with parameters.')
+            except TypeError:
+                print("Export file unfortunately dont save.")

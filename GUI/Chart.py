@@ -14,7 +14,7 @@ class Chart:
     """
 
     def __init__(self):
-        self.fig,self.ax = plt.subplots()
+        self.fig, self.ax = plt.subplots()
         self.lines = []
         self.init_canvas()
         
@@ -24,7 +24,7 @@ class Chart:
     
     def init_canvas(self):
         self.canvas = FigureCanvas(self.fig)
-        self.canvas.set_size_request(400, 400)
+        self.canvas.set_size_request(500, 500)
 
     @property
     def return_canvas(self):
@@ -35,7 +35,9 @@ class Chart:
         # time.sleep(10)
         # self.lines[0].remove()
         # self.ax.draw()
-        self.ax.legend()
+        self.ax.legend(loc='best')
+        self.ax.set_xlabel('x')
+        self.ax.set_ylabel('y')
     
     def clear_chart(self):
         for line in self.lines:
