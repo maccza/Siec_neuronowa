@@ -2,6 +2,10 @@ import torch
 
 
 class DataSet:
+    """
+    Klasa, ktora tworzy zbior uczacy i testowy wedlug parametrow podanych w pliku XML.
+    """
+
     def __init__(self, train_size, x_train_scale, y_train_type, test_size, y_test_type):
         self.tr_size = train_size
         self.x_tr_sc = x_train_scale

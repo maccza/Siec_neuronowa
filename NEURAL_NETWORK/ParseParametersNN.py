@@ -3,14 +3,19 @@ import torch
 
 
 class ParseParametersNN:
-    def __init__(self,xml_path):
+    """
+    Klasa do parsowania i sprawdzenia poprawnosci parametrow podanych w XML, ktore wykorzystywane do tworzenia sieci
+    neuronowej i zbioru uczacego i testowego.
+    """
+
+    def __init__(self, xml_path):
         self.xml_ = minidom.parse(xml_path)
         self.settings_tree = self.xml_.documentElement
         self.settings = self.settings_tree.getElementsByTagName('Parameter')
         self.message = None
         self.status = None
-    def parse_parameters_NN_by_name(self, name):
 
+    def parse_parameters_NN_by_name(self, name):
         accept_fun_activation = {'Sigmoid': torch.nn.Sigmoid(), 'Tanh': torch.nn.Tanh, 'ReLU': torch.nn.ReLU}
         for setting in self.settings:
             if setting.getAttribute('name') == name and name == 'NeuralNetwork':
@@ -25,14 +30,16 @@ class ParseParametersNN:
                 except KeyError:
                     self.message = 'Niepoprawna wartosc nazwy funkcji aktywacji. Do wyboru: Sigmoid, Tanh, ReLU'
                     self.status = 2
-                    
+                    raise print(self.message)
                 except TypeError:
                     self.message = 'Ilosc neuronow w ukrytej warstwie powinna byc typu int'
                     self.status = 3
+                    raise print(self.message)
                 except ValueError:
-                    self.message = 'Niepoprawny typ jednego z parametrow: n_hidden_neurons. '
+                    self.message = 'Niepoprawny typ jednego z parametrow: n_hidden_neurons.'
                     self.status = 3
-                    
+                    raise print(self.message)
+
             elif setting.getAttribute('name') == name and name == 'Dataset':
                 try:
                     accept_y_train_test_type = {'Sin': 'Sin', 'Cos': 'Cos', 'Tan': 'Tan'}
@@ -53,11 +60,10 @@ class ParseParametersNN:
                     self.message = f'xml load succesfully .'
                     self.status = 1
                 except KeyError:
-                    self.message = 'Niepoprawna wartosc parametru y_train_type. Do wyboru: Sin, Cos, Tan.'
+                    self.message = 'Niepoprawna wartosc parametru "y_train_type" lub "y_test_type". Do wyboru: Sin, Cos, Tan.'
                     self.status = 3
-                    
+                    raise print(self.message)
                 except ValueError:
                     self.message = 'Niepoprawny typ jednego z parametrow: train_size, x_train_scale_0, x_train_scale_1, x_train_scale_1, test_size. '
                     self.status = 3
-                    
-                               
+                    raise print(self.message)

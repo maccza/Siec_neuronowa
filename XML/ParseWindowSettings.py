@@ -1,4 +1,6 @@
 from xml.dom import minidom
+
+
 class ParseWindowSettings:
     def __init__(self):
         xml_ = minidom.parse('XML/Window_settings.xml')
@@ -11,10 +13,12 @@ class ParseWindowSettings:
             self.height = int(par_height.childNodes[0].data)
             par_title = setting.getElementsByTagName('title')[0]
             self.title = str(par_title.childNodes[0].data)
+
     def return_height(self):
         return self.height
+
     def return_width(self):
         return self.width
+
     def return_window_title(self):
-        return self.title                   
-       
+        return self.title

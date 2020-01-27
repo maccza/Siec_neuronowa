@@ -9,7 +9,7 @@ import TrainTestDataset as ttd
 def predict(net, x, y):
     y_pred = net.forward(x)
     plt.plot(x.numpy(), y.numpy(), 'o', label='Groud truth')
-    plt.plot(x.numpy(), y_pred.data.numpy(), 'o', c='r', label='Prediction');
+    plt.plot(x.numpy(), y_pred.data.numpy(), 'o', c='r', label='Prediction')
     print(y_pred.data.numpy())
     plt.legend(loc='upper left')
     plt.xlabel('$x$')
@@ -29,8 +29,6 @@ def training_procedure(neural_network, x_tr, y_tr):
 
 
 if __name__ == '__main__':
-    print("Hello world!")
-
     # 1. Parsujemy parametry podane przez uzytkownika do utworzenia Datasetu i Sieci
     parameters = pp.ParseParametersNN('/home/maciek/Siec_neuronowa/XML/ParametersNN.xml')
     parameters.parse_parameters_NN_by_name('NeuralNetwork')

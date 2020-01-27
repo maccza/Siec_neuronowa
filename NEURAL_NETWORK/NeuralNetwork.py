@@ -16,7 +16,7 @@ class SineNet(torch.nn.Module):
     def forward(self, x):
         """
         Metoda, ktora okresla w jakiej kolejnosci zdefiniowane warstwy w __init__ sa stosowane.
-        Przrpuszcza wartosc wejsiowa X przez siec.
+        Przepuszcza wartosc wejsiowa X przez siec.
 
         :param x: dane wejsciowe do sieci w postaci tensorowej
         :type x: torch.Tensor
