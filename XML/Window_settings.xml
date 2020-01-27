@@ -2,6 +2,6 @@
     <window_settings>
         <width>700</width>
         <height>600</height>
-        <title>Sieci Neuronowe</title>
+        <title>Visualization of neural network results</title>
     </window_settings>
 </window>
