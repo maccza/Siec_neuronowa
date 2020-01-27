@@ -30,7 +30,7 @@ Interfejs zawiera:
 - Sieć zaimplementowano za pomocą biblioteki PyTorch ([oficjalna strona modułu PyTorch](https://pytorch.org/)).
 
 ### 4. Instrukcja instalacji. 
-- Zalecana wersja Python to 3.6.
+Zalecana wersja Python to 3.6.
 1. Pobrać repozytorium: `$ git clone https://github.com/maccza/Siec_neuronowa.git`.
 2. Utworzyć witrualne środowisko: [link do tutoriala](https://python101.readthedocs.io/pl/latest/env/tools.html).
 3. Zainstałować PyGObject: [link do tutoriala](https://pygobject.readthedocs.io/en/latest/getting_started.html).
