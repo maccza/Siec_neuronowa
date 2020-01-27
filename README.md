@@ -53,6 +53,6 @@ Interfejs zawiera:
 6. Przyciskiem `Stop` resetuje wykresy i sieć.
 7. Powtarza czynności z punktów 1-6 dla innych interesujących parametrów.
 
-#### 6. Inspiracje
+### 6. Inspiracje
 1. https://github.com/SlinkoIgor/Neural_Networks_and_CV, inspiracja do wykorzystanego problemu, który rozwiązuje w danym modułu sieć neuronowa.
 
