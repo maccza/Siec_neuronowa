@@ -1,6 +1,7 @@
 from lxml import etree
 from pathlib import Path
 import torch
+import multiprocessing as mp
 
 import NEURAL_NETWORK.NeuralNetwork as nn
 import NEURAL_NETWORK.ParseParametersNN as pp
@@ -20,6 +21,9 @@ class Control:
         self.dataset = None
         self.neural_network = None
         self.out_y_predict = None
+        self.status = None
+        self.message = None
+
 
     def load_xml(self, xml_path):
         self.xml_path = xml_path
@@ -55,18 +59,24 @@ class Control:
                                              self.paramiters.y_train_type,
                                              self.paramiters.test_size,
                                              self.paramiters.y_test_type)
+
                 self.neural_network = nn.SineNet(self.paramiters.n_hidden_neurons,
                                                 self.paramiters.fun_activation)
                 self.training_procedure(self.neural_network,
                                         self.dataset.x_train,
                                         self.dataset.y_train)
+
+
             except AttributeError:
-                return (3, "Zle podany jeden lub kilka parametrow w XML")
+                self.message = 'Zle podany jeden lub kilka parametrow w XML'
+                self.status = 3
         else:
-            return(self.paramiters.status,
-                    self.paramiters.message)
-        return(self.paramiters.status,
-                    self.paramiters.message)
+            self.message = self.paramiters.message
+            self.status = self.paramiters.status
+
+        self.message = self.paramiters.message
+        self.status = self.paramiters.status
+
 
     def predict(self):
         self.out_y_predict = self.neural_network.forward(self.dataset.x_test)

@@ -2,7 +2,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from functools import partial
-
+import multiprocessing as mp
 import XML.ParseWindowSettings as ParseWindowSettings
 import XML.ParseButtonsSettings as ParseButtonsSettings
 from COLLECTIONS.CustomTuples import CustomTuple
@@ -206,19 +206,25 @@ class MainInterface(Gtk.Window):
             self.show_message(log_tuple)
             return log_tuple
         else:
+            lock = mp.Lock()
             self.control.parse_setting_xml
-            status, message = self.control.to_lern_network()
+            process = mp.Process(target=self.control.to_lern_network(), args=(lock, self.control))
+            process.start()
+            process.join()
+
             try:
+                #self.control.lock_run_process()
                 data_set_x, data_set_y = self.control.return_train_dataset_to_plot
                 self.chart.plot_dataset(data_set_x,
                                         data_set_y,
                                         "True test")
+
             except AttributeError:
                 print('Zle podany jeden lub kilka parametrow w XML')
                 return (3, "Zle podany jeden lub kilka parametrow w XML")
             self.canvas.draw()
-            if status != 1:
-                self.show_message(self.Log_Tuple(status, message, None))
+            if self.control.status!=1:
+                self.show_message(self.Log_Tuple(self.control.status, self.control.message, None))
             
     def predict_signal_fun(self, widget):
         if self.control.neural_network is None:
@@ -227,9 +233,10 @@ class MainInterface(Gtk.Window):
                         None)
             self.show_message(log_tuple)
         else:
-            self.control.predict()
-            self.control.parse_setting_xml
-            status, message = self.control.to_lern_network()
+            lock = mp.Lock()
+            process = mp.Process(target=self.control.predict(), args=(lock, self.control))
+            process.start()
+            process.join()
             data_set_x,data_set_y = self.control.return_test_dataset_to_plot
             self.chart.plot_dataset(data_set_x,
                                     data_set_y,
