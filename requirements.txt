@@ -8,4 +8,4 @@ PyGObject==3.34.0
 pyparsing==2.4.6
 python-dateutil==2.8.1
 six==1.14.0
-torch==1.4.0
+torch==1.13.1
